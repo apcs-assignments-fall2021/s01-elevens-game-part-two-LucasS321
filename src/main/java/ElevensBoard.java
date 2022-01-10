@@ -24,7 +24,13 @@ public class ElevensBoard extends Board {
     // returns true if **any** two of the given cards adds up to exactly 11
     // and false otherwise
     public boolean containsPairSum11(ArrayList<Integer> cardIndexes) {
-        // YOUR CODE HERE
+        for (int x: cardIndexes) {
+            for (int y: cardIndexes) {
+                if (cardAt(x).getPointValue()+cardAt(y).getPointValue() == 11) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -32,8 +38,21 @@ public class ElevensBoard extends Board {
     // returns true if there is at least 1 Jack, at least 1 Queen, and at least 1 King
     // amongst the selected cards, and false otherwise
     public boolean containsJQK(ArrayList<Integer> cardIndexes) {
-        // YOUR CODE HERE
-        return false;
+        boolean kingfound = false;
+        boolean queenfound = false;
+        boolean jackfound = false;
+        for (int x: cardIndexes) {
+            if (cardAt(x).getRank() == "king") {
+                kingfound = true;
+            }
+            if (cardAt(x).getRank() == "queen") {
+                queenfound = true;
+            }
+            if (cardAt(x).getRank() == "jack") {
+                jackfound = true;
+            }
+        }
+        return kingfound && queenfound && jackfound;
     }
 
     // Determine if there are any legal plays left on the board.
@@ -47,7 +66,7 @@ public class ElevensBoard extends Board {
 
         // YOUR CODE HERE
         // Just 1-2 lines of code needed
-        return false;
+        return containsJQK(allCards) || containsPairSum11(allCards);
     }
 
     // Determines if the selected cards form a valid group for removal. In Elevens,
@@ -56,6 +75,13 @@ public class ElevensBoard extends Board {
     @Override
     public boolean isLegal(ArrayList<Integer> selectedCards) {
         // YOUR CODE HERE
+        System.out.println(containsPairSum11(selectedCards));
+        if (selectedCards.size() == 2) {
+            return containsPairSum11(selectedCards);
+        }
+        if (selectedCards.size() == 3) {
+            return containsJQK(selectedCards);
+        }
         return false;
     }
 }
